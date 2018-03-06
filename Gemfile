@@ -14,6 +14,9 @@ gem 'puma', '~> 3.7'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
 
+# A set of responders modules to dry up your Rails 4.2+ app.
+gem 'responders'
+
 # Use Webpack to manage app-like JavaScript modules in Rails
 gem 'webpacker', '~> 3.2'
 
