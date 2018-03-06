@@ -1,2 +1,9 @@
-# minesweeper-rails-react
-Rails 5 + React to implement the famous minesweeper game
+# Minesweeper
+
+## Techonologies
+
+- rails (~> 5.1.0)
+
+## Contact
+
+- Santiago Doldán (santiagodolte@gmail.com)
