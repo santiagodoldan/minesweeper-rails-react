@@ -1,5 +1,7 @@
 import * as React from "react"
 import { RouteComponentProps, withRouter } from "react-router-dom"
+// import { MatchCell } from "./match_cell"
+import { Grid } from "../../lib/grid"
 import { Match } from "../../models/match"
 import { DataService } from "../../services/data_service"
 import { inject } from "../../utils/ioc"
@@ -10,6 +12,7 @@ interface IMatchShowParams {
 
 interface IMatchShowState {
   match: Match
+  grid: Grid
 }
 
 class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowParams>, IMatchShowState> {
@@ -20,13 +23,25 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
   public constructor(props: RouteComponentProps<IMatchShowParams>) {
     super(props)
 
-    this.state = { match: undefined }
+    this.state = { match: undefined, grid: undefined }
+
+    this.onCellClicked = this.onCellClicked.bind(this)
   }
 
   public async componentDidMount() {
     const match = await this.dataService.getMatch(this.props.match.params.id)
 
-    this.setState({ match })
+    const grid = new Grid(match.rows, match.columns, match.mines)
+
+    this.setState({ match, grid })
+  }
+
+  public onCellClicked(pos: string): void {
+    const [row, col] = pos.split(":").map((v: string) => Number(v))
+
+    this.state.grid.discoverCell(row, col)
+
+    this.setState({ grid: this.state.grid })
   }
 
   public render() {
@@ -44,9 +59,13 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
                       <tr key={ row }>
                         {
                           Array.apply(null, { length: this.state.match.columns }).map((_: any, col: number) => {
+                            const pos = `${row}:${col}`
+
                             return (
-                              <td key={ `${row}:${col}` }>
+                              <td key={ pos } onClick={ () => this.onCellClicked(pos) }>
                                 &nbsp;
+
+                                { this.state.grid.visibleCells.includes(pos) ? "o" : null }
                               </td>
                             )
                           })

@@ -14,6 +14,19 @@ export class DataService {
   }
 
   public async getMatch(id: number): Promise<Match> {
-    return { id: 1, name: "Test", rows: 10, columns: 20, mines: [], flags: []} as Match
+    const mines: string[] = []
+
+    // random mines to test
+    while (mines.length < 80) {
+      const row = Math.round(Math.random() * 20)
+      const col = Math.round(Math.random() * 20)
+      const pos = `${row}:${col}`
+
+      if (!mines.includes(pos)) {
+        mines.push(pos)
+      }
+    }
+
+    return { id: 1, name: "Test", rows: 20, columns: 20, mines, flags: []} as Match
   }
 }
