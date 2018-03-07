@@ -9,25 +9,27 @@ export class MatchShow extends React.Component {
 
         <div className="mx-auto mt-5 w-50">
           <table className="table table-bordered table-sm">
-            <tr>
-              <td className="w-25 text-center">
-                <i className="fa fa-bomb"></i>
-              </td>
-              <td className="w-25 text-center">
-                <i className="fa fa-flag-checkered"></i>
-              </td>
-              <td className="w-25 text-center"></td>
-            </tr>
-            <tr>
-              <td className="w-25 text-center">&nbsp;</td>
-              <td className="w-25 text-center"></td>
-              <td className="w-25 text-center"></td>
-            </tr>
-            <tr>
-              <td className="w-25 text-center">&nbsp;</td>
-              <td className="w-25 text-center"></td>
-              <td className="w-25 text-center"></td>
-            </tr>
+            <tbody>
+              <tr>
+                <td className="w-25 text-center">
+                  <i className="fa fa-bomb"></i>
+                </td>
+                <td className="w-25 text-center">
+                  <i className="fa fa-flag-checkered"></i>
+                </td>
+                <td className="w-25 text-center"></td>
+              </tr>
+              <tr>
+                <td className="w-25 text-center">&nbsp;</td>
+                <td className="w-25 text-center"></td>
+                <td className="w-25 text-center"></td>
+              </tr>
+              <tr>
+                <td className="w-25 text-center">&nbsp;</td>
+                <td className="w-25 text-center"></td>
+                <td className="w-25 text-center"></td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
