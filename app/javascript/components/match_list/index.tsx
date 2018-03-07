@@ -33,10 +33,12 @@ export class MatchList extends React.Component<any, IMatchListState> {
         <table className="table table-dark table-striped mt-5">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Height</th>
-              <th>Width</th>
-              <th></th>
+              <th className="w-50">Name</th>
+              <th className="w-25">Rows</th>
+              <th className="w-25">Columns</th>
+              <th>
+                <i className="fa fa-link"></i>
+              </th>
             </tr>
           </thead>
 
@@ -44,9 +46,9 @@ export class MatchList extends React.Component<any, IMatchListState> {
             {
               this.state.matches.map((match) =>
                 <tr key={ match.id }>
-                  <td>Tst</td>
-                  <td>{ match.height }</td>
-                  <td>{ match.width }</td>
+                  <td>{ match.name }</td>
+                  <td>{ match.rows }</td>
+                  <td>{ match.columns }</td>
                   <td>
                     <Link to={ `/matches/${match.id}` }>Play</Link>
                   </td>

@@ -4,10 +4,13 @@ import { Expose } from "class-transformer"
 export class Match extends Base {
 
   @Expose()
-  public height: number
+  public name: string
 
   @Expose()
-  public width: number
+  public rows: number
+
+  @Expose()
+  public columns: number
 
   @Expose()
   public mines: string[]

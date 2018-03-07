@@ -1,6 +1,4 @@
 class Api::MatchesController < Api::ApplicationController
-  respond_to :json
-
   # GET /api/matches
   def index
     @matches = Match.all
