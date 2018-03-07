@@ -4,10 +4,12 @@
     <title>Minesweeper</title>
     <%= csrf_meta_tags %>
 
-    <%= javascript_pack_tag 'application' %>
+    <%= stylesheet_pack_tag 'application' %>
   </head>
 
   <body>
-    <%= yield %>
+    <div id="app"></div>
+
+    <%= javascript_pack_tag 'application' %>
   </body>
 </html>

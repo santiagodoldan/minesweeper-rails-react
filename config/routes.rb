@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   namespace :api do
     resources :matches, only: [:index, :show]
   end
+
+  get '*path', to: 'dashboard#index'
 end
