@@ -1,7 +1,5 @@
 class Match < ApplicationRecord
 
-  serialize :mines, Array
-
   def self.create_and_generate_mines(attrs = {})
     attrs.tap do |result|
       rows    = result[:rows] || 10

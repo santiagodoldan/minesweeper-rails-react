@@ -4,7 +4,7 @@ class CreateMatches < ActiveRecord::Migration[5.1]
       t.string :name
       t.integer :rows
       t.integer :columns
-      t.string :mines, array: true, default: [].to_yaml
+      t.string :mines, array: true, default: []
     end
   end
 end
