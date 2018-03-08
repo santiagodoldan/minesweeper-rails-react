@@ -1,10 +1,16 @@
 import * as React from "react"
 import { RouteComponentProps, withRouter } from "react-router-dom"
-// import { MatchCell } from "./match_cell"
-import { Grid } from "../../lib/grid"
+import { MatchCell } from "./match_cell"
+import { Grid, MinePressedError } from "../../lib/grid"
 import { Match } from "../../models/match"
 import { DataService } from "../../services/data_service"
 import { inject } from "../../utils/ioc"
+
+enum MatchState {
+  Playing = "Playing",
+  GameOver = "GameOver",
+  Win = "Win",
+}
 
 interface IMatchShowParams {
   id: number
@@ -12,7 +18,8 @@ interface IMatchShowParams {
 
 interface IMatchShowState {
   match: Match
-  grid: Grid
+  visibleCells: string[]
+  matchState: MatchState
 }
 
 class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowParams>, IMatchShowState> {
@@ -23,7 +30,11 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
   public constructor(props: RouteComponentProps<IMatchShowParams>) {
     super(props)
 
-    this.state = { match: undefined, grid: undefined }
+    this.state = {
+      match: undefined,
+      matchState: MatchState.Playing,
+      visibleCells: [],
+    }
 
     this.onCellClicked = this.onCellClicked.bind(this)
   }
@@ -31,17 +42,30 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
   public async componentDidMount() {
     const match = await this.dataService.getMatch(this.props.match.params.id)
 
-    const grid = new Grid(match.rows, match.columns, match.mines)
-
-    this.setState({ match, grid })
+    this.setState({ match })
   }
 
   public onCellClicked(pos: string): void {
-    const [row, col] = pos.split(":").map((v: string) => Number(v))
+    if (this.state.matchState === MatchState.Playing) {
+      const [row, col] = pos.split(":").map((v: string) => Number(v))
 
-    this.state.grid.discoverCell(row, col)
+      const grid = new Grid(
+        this.state.match.rows,
+        this.state.match.columns,
+        this.state.match.mines,
+        this.state.visibleCells,
+      )
 
-    this.setState({ grid: this.state.grid })
+      try {
+        grid.discoverCell(row, col)
+      } catch (err) {
+        if (err instanceof MinePressedError) {
+          this.setState({ matchState: MatchState.GameOver })
+        }
+      }
+
+      this.setState({ visibleCells: grid.visibleCells })
+    }
   }
 
   public render() {
@@ -60,13 +84,16 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
                         {
                           Array.apply(null, { length: this.state.match.columns }).map((_: any, col: number) => {
                             const pos = `${row}:${col}`
+                            const visible = this.state.visibleCells.includes(pos)
+                            const showMine = this.state.matchState === MatchState.GameOver && this.state.match.mines.includes(pos)
 
                             return (
-                              <td key={ pos } onClick={ () => this.onCellClicked(pos) }>
-                                &nbsp;
-
-                                { this.state.grid.visibleCells.includes(pos) ? "o" : null }
-                              </td>
+                              <MatchCell
+                                key={pos}
+                                onClick={this.onCellClicked}
+                                pos={pos}
+                                visible={visible}
+                                showMine={showMine} />
                             )
                           })
                         }

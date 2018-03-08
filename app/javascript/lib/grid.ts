@@ -1,15 +1,16 @@
+import { BaseError } from "./error"
+
+export class MinePressedError extends BaseError { }
+
 export class Grid {
-  public rows: number
-  public columns: number
-  public matrix: boolean[][]
-  public mines: string[]
   public visibleCells: string[]
 
-  public constructor(rows: number, columns: number, mines: string[]) {
-    this.rows         = rows
-    this.columns      = columns
+  private mines: string[]
+  public matrix: boolean[][]
+
+  public constructor(rows: number, columns: number, mines: string[], visibleCells: string[]) {
     this.mines        = mines
-    this.visibleCells = []
+    this.visibleCells = visibleCells
 
     // This is for an easy way to check if a given cell exists in the match's grid
     this.matrix = Array.apply(null, { length: rows }).map(() => Array.apply(null, { length: columns }).map(() => true))
@@ -19,10 +20,8 @@ export class Grid {
     const pos = `${row}:${col}`
 
     if (this.mines.includes(pos)) {
-      alert("boom")
-    } else if (this.visibleCells.includes(pos)) {
-      // TODO
-    } else {
+      throw new MinePressedError()
+    } else if (!this.visibleCells.includes(pos)) {
       if (firstRun || !this.checkIfNeighborsHaveMines(row, col)) {
         this.visibleCells.push(pos)
         this.discoverNeighborCells(row, col)
