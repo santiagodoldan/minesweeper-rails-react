@@ -1,24 +1,21 @@
-class Match
+class Match < ApplicationRecord
 
-  # mimic AR Model.all method
-  def self.all
-    [Match.new.fake]
+  def self.create_and_generate_mines(attrs = {})
+    attrs.tap do |result|
+      rows    = result[:rows] || 10
+      columns = result[:columns] || 10
+
+      result[:rows]    = rows
+      result[:columns] = columns
+      result[:mines]   = []
+
+      while (result[:mines].size < ((rows*columns)/5)) do
+        pos = "#{rand(0..(rows-1))}:#{rand(0..(columns-1))}"
+
+        result[:mines] << pos unless result[:mines].include?(pos)
+      end
+    end
+
+    self.create(attrs)
   end
-
-  # mimic AR Model.find method
-  def self.find(id)
-    Match.new.fake
-  end
-
-  def fake
-    {
-      id: 1,
-      name: "Test",
-      rows: 10,
-      columns: 10,
-      mines: ["1:2", "4:6", "7:3"],
-      flags: ["1:2"]
-    }
-  end
-
 end
