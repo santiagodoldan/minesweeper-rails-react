@@ -47,6 +47,8 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
 
   public onCellClicked(pos: string): void {
     if (this.state.matchState === MatchState.Playing) {
+      let matchState = this.state.matchState
+
       const [row, col] = pos.split(":").map((v: string) => Number(v))
 
       const grid = new Grid(
@@ -60,11 +62,15 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
         grid.discoverCell(row, col)
       } catch (err) {
         if (err instanceof MinePressedError) {
-          this.setState({ matchState: MatchState.GameOver })
+          matchState = MatchState.GameOver
         }
       }
 
-      this.setState({ visibleCells: grid.visibleCells })
+      if ((grid.visibleCells.length + this.state.match.mines.length) === (this.state.match.rows * this.state.match.columns)) {
+        matchState = MatchState.Win
+      }
+
+      this.setState({ visibleCells: grid.visibleCells, matchState })
     }
   }
 
@@ -72,6 +78,16 @@ class MatchShowComponent extends React.Component<RouteComponentProps<IMatchShowP
     return (
       <div>
         <h1>Match show</h1>
+
+        {
+          this.state.matchState === MatchState.GameOver &&
+            <div className="mt-5 alert alert-danger">Game Over</div>
+        }
+
+        {
+          this.state.matchState === MatchState.Win &&
+            <div className="mt-5 alert alert-success">Congrats!! You won</div>
+        }
 
         <div className="mx-auto mt-5 w-50">
           <table className="table table-bordered table-sm">
