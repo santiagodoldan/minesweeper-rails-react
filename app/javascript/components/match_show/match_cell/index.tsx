@@ -21,9 +21,9 @@ export class MatchCell extends React.Component<IMatchCellProps> {
     if (this.props.showMine) {
       classes.push("bg-danger")
     } else if (this.props.visible) {
-      classes.push("bg-light")
-    } else {
       classes.push("bg-secondary")
+    } else {
+      classes.push("bg-light")
     }
 
     return classes.join(" ")

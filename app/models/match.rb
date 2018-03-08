@@ -12,6 +12,7 @@ class Match
 
   def fake
     {
+      id: 1,
       name: "Test",
       rows: 10,
       columns: 10,
